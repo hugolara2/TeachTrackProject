@@ -1,0 +1,37 @@
+# --- Archivo .editorconfig Raíz para C# ---
+# Este archivo define las reglas de formato para el proyecto.
+# REGLA MÁS IMPORTANTE: Detener la búsqueda en carpetas superiores.
+root = true
+
+# Aplicar a todos los archivos C# del proyecto
+[*.cs]
+
+# --- REGLAS DE INDENTACIÓN BÁSICAS ---
+
+# Usar espacios en lugar de tabs
+indent_style = space
+
+# Tamaño de la indentación (4 espacios)
+indent_size = 4
+tab_width = 4
+
+# --- REGLAS DE LLAVES (BRACES) PARA ESTILO K&R (EN LA MISMA LÍNEA) ---
+# Esto logra: public class MiClase { ... }
+
+# Llaves en la misma línea para tipos (clases, interfaces, structs, enums)
+csharp_style_braces_on_same_line_for_types = true
+
+# Llaves en la misma línea para métodos y funciones locales
+csharp_style_braces_on_same_line_for_methods = true
+csharp_style_braces_on_same_line_for_local_functions = true
+
+# Llaves en la misma línea para propiedades, accesors (get/set) y eventos
+csharp_style_braces_on_same_line_for_properties = true
+csharp_style_braces_on_same_line_for_accessors = true
+csharp_style_braces_on_same_line_for_events = true
+
+# --- ANULACIÓN DE REGLAS CONTRADICTORIAS (LAS QUE ENCONTRASTE) ---
+# Nos aseguramos de que las reglas de "nueva línea" estén desactivadas.
+# (Aunque definir las de "misma línea" en 'true' ya debería ser suficiente)
+
+csharp_new_line_before_open_brace = none
