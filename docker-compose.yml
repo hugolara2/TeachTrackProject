@@ -8,7 +8,7 @@ services:
     ports: 
       - "8080:8080"
     volumes:
-      - .:/source
+      - .:/src
     depends_on:
       postgres:
         condition: service_healthy
@@ -17,6 +17,7 @@ services:
         - action: rebuild
           path: . 
     environment:
+      - HUSKY=0
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
 
@@ -29,8 +30,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
+      start_period: 30s
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
