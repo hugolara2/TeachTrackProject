@@ -1,7 +1,6 @@
 ﻿namespace TeachTrack.Model.Enums;
 
-public enum DayOfWeek
-{
+public enum DayOfWeek {
     Monday,
     Tuesday,
     Wednesday,

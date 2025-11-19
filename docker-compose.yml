@@ -1,5 +1,26 @@
 
 services:
+  backend:
+    build:
+      context: . 
+      dockerfile: ./TeachTrack.Api/Dockerfile 
+      target: development
+    ports: 
+      - "8080:8080"
+    volumes:
+      - .:/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: . 
+    environment:
+      - HUSKY=0
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+
   postgres:
     image: postgres:latest 
     container_name: TeachTrackContainer
@@ -9,7 +30,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      start_period: 30s
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
