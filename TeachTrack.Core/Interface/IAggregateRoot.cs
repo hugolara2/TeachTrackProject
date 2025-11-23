@@ -1,5 +1,5 @@
 namespace TeachTrack.Core.Interface;
 
-public interface IAggragateRoot {
+public interface IAggregateRoot {
     
 }
