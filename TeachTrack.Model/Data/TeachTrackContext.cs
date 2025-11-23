@@ -5,13 +5,13 @@ using TeachTrack.Model.Data.Models;
 
 namespace TeachTrack.Model.Data;
 
-public partial class FixItContext : DbContext
+public partial class TeachTrackContext : DbContext
 {
-    public FixItContext()
+    public TeachTrackContext()
     {
     }
 
-    public FixItContext(DbContextOptions<FixItContext> options)
+    public TeachTrackContext(DbContextOptions<TeachTrackContext> options)
         : base(options)
     {
     }
