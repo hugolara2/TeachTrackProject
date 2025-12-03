@@ -1,5 +1,6 @@
 using TeachTrack.Core.Exceptions;
 using TeachTrack.Core.Interfaces;
+using TeachTrack.Core.ValueObjects;
 
 namespace TeachTrack.Core.Entities;
 
