@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TeachTrack.Core.Entities;
@@ -46,6 +46,36 @@ public partial class TeachTrackContext : DbContext {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresEnum<DayOfWeek>();
+        
+
+        modelBuilder.Entity<Course>(entity =>
+        {
+            entity.HasKey(e => e.CourseId).HasName("course_pkey");
+
+            entity.ToTable("course");
+
+            entity.HasIndex(e => e.CourseCode, "course_course_code_key").IsUnique();
+
+            entity.Property(e => e.CourseId)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("course_id");
+            entity.Property(e => e.CourseCode)
+                .HasDefaultValueSql("nextval('course_code_seq'::regclass)")
+                .HasColumnName("course_code");
+            entity.Property(e => e.CourseTitle)
+                .HasMaxLength(100)
+                .HasColumnName("course_title");
+            entity.Property(e => e.Credits)
+                .HasPrecision(4, 2)
+                .HasColumnName("credits");
+            entity.Property(e => e.DepartmentId).HasColumnName("department_id");
+            entity.Property(e => e.Description).HasColumnName("description");
+
+            entity.HasOne(d => d.Department).WithMany(p => p.Courses)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("course_department_id_fkey");
+        });
 
         modelBuilder.Entity<AcademicStanding>(entity =>
         {
@@ -187,40 +217,7 @@ public partial class TeachTrackContext : DbContext {
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("student_degrees_student_id_fkey");
         });
-
-        modelBuilder.Entity<Teacher>(entity =>
-        {
-            entity.HasKey(e => e.TeacherId).HasName("teacher_pkey");
-
-            entity.ToTable("teacher");
-
-            entity.HasIndex(e => e.DepartmentId, "idx_teacher_department_id");
-
-            entity.HasIndex(e => e.Email, "teacher_email_key").IsUnique();
-
-            entity.HasIndex(e => e.TeacherCode, "teacher_teacher_code_key").IsUnique();
-
-            entity.Property(e => e.TeacherId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("teacher_id");
-            entity.Property(e => e.DepartmentId).HasColumnName("department_id");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(50)
-                .HasColumnName("first_name");
-            entity.Property(e => e.LastName)
-                .HasMaxLength(50)
-                .HasColumnName("last_name");
-            entity.Property(e => e.TeacherCode)
-                .HasDefaultValueSql("nextval('teacher_code_seq'::regclass)")
-                .HasColumnName("teacher_code");
-
-            entity.HasOne(d => d.Department).WithMany(p => p.Teachers)
-                .HasForeignKey(d => d.DepartmentId)
-                .HasConstraintName("teacher_department_id_fkey");
-        });
+        
         modelBuilder.HasSequence("course_code_seq")
             .StartsAt(170120L)
             .IncrementsBy(3);
