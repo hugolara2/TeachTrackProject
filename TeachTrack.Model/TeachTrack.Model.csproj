@@ -16,4 +16,8 @@
       <ProjectReference Include="..\TeachTrack.Core\TeachTrack.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TeachTrack.Core\TeachTrack.Core.csproj" />
+    </ItemGroup>
+
 </Project>
