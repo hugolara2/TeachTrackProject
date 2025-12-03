@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeachTrack.Core.Entities;
 
-namespace TeachTrack.Model.Persistence.Configuration;
+namespace TeachTrack.Model.Persistence.Configurations;
 
 public class CourseOfferingConfiguration : IEntityTypeConfiguration<CourseOffering> {
     public void Configure(EntityTypeBuilder<CourseOffering> builder) {
@@ -62,6 +62,5 @@ public class CourseOfferingConfiguration : IEntityTypeConfiguration<CourseOfferi
             .HasForeignKey(e => e.ScheduleId)
             .HasConstraintName("course_offering_schedule_id_fkey")
             .OnDelete(DeleteBehavior.SetNull); // If schedule is deleted, offering becomes unscheduled
-    }
     }
 }

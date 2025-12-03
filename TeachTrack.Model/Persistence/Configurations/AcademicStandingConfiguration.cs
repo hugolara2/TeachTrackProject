@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeachTrack.Core.Entities;
-using TeachTrack.Model.Data.Models;
 
-namespace TeachTrack.Model.Persistence.Configuration;
+namespace TeachTrack.Model.Persistence.Configurations;
 
 public class AcademicStandingConfiguration : IEntityTypeConfiguration<AcademicStanding> {
     public void Configure(EntityTypeBuilder<AcademicStanding> builder) {

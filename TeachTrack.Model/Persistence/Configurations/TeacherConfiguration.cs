@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeachTrack.Core.Entities;
+using TeachTrack.Core.ValueObjects;
 
-namespace TeachTrack.Model.Persistence.Configuration;
+namespace TeachTrack.Model.Persistence.Configurations;
 
 public class TeacherConfiguration : IEntityTypeConfiguration<Teacher> {
     public void Configure(EntityTypeBuilder<Teacher> builder) {
