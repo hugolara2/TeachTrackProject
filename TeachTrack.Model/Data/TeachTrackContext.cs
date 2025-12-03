@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TeachTrack.Core.Entities;
 
@@ -39,11 +37,7 @@ public partial class TeachTrackContext : DbContext {
 
     public virtual DbSet<Teacher> Teachers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Name=ConnectionStrings:DefaultConnection");
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.HasPostgresEnum<DayOfWeek>();
         
         modelBuilder.HasSequence("course_code_seq")
@@ -56,9 +50,8 @@ public partial class TeachTrackContext : DbContext {
         modelBuilder.HasSequence("major_code_seq").StartsAt(321120L);
         modelBuilder.HasSequence("student_enrollment_seq").StartsAt(215111111110L);
         modelBuilder.HasSequence("teacher_code_seq").StartsAt(215122L);
-
-        OnModelCreatingPartial(modelBuilder);
+        
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(TeachTrackContext).Assembly);
+        
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
