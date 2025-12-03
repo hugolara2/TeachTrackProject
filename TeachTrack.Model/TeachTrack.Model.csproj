@@ -20,4 +20,8 @@
       <ProjectReference Include="..\TeachTrack.Core\TeachTrack.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data\Models\" />
+    </ItemGroup>
+
 </Project>
