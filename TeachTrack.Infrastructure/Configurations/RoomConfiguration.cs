@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TeachTrack.Core.Entities;
 
-namespace TeachTrack.Model.Persistence.Configurations;
+namespace TeachTrack.Infrastructure.Configurations;
 
 public class RoomConfiguration : IEntityTypeConfiguration<Room> {
     public void Configure(EntityTypeBuilder<Room> builder) {

@@ -10,15 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TeachTrack.Model\TeachTrack.Model.csproj" />
+    <ProjectReference Include="..\TeachTrack.Infrastructure\TeachTrack.Infrastructure.csproj" />
   </ItemGroup>
 
   <Target Name="Husky" BeforeTargets="Restore;CollectePackageReferences" Condition="'$(HUSKY)' != '0'">

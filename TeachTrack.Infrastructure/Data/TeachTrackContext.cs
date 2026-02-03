@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TeachTrack.Core.Entities;
 
-namespace TeachTrack.Model.Data;
+namespace TeachTrack.Infrastructure.Data;
 
 public partial class TeachTrackContext : DbContext {
     public TeachTrackContext() { }

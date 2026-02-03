@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TeachTrack.Infrastructure.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<TeachTrackContext>(options => 
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"), 
+        b => b.MigrationsAssembly("TeachTrack.Infrastructure")));
 
 var app = builder.Build();
 

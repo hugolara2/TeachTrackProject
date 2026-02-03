@@ -1,4 +1,4 @@
-﻿namespace TeachTrack.Model.Enums;
+﻿namespace TeachTrack.Infrastructure.Enums;
 
 public enum DayOfWeek {
     Monday,

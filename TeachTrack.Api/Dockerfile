@@ -1,55 +1,66 @@
 # Use a build argument to set the UID for the non-root user
 ARG APP_UID=1000
 
-# 1. Build Stage: Optimized for layer caching
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+# ==========================================
+# 1. Build Stage
+# ==========================================
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /source
 
-# Define a new argument to control Husky during the build
 ARG BUILD_ARGS_HUSKY=1 
 
-# Copy only project files first to leverage Docker cache
-COPY ./TeachTrack.Api/*.csproj ./TeachTrack.Api/
-COPY ./TeachTrack.Data/*.csproj ./TeachTrack.Data/
-# (Add a line for each project in your solution)
+# --- COPY CSPROJ FILES ---
+# 1. The Core (Domain Entities)
+COPY ./TeachTrack.Core/*.csproj ./TeachTrack.Core/
 
-# Restore dependencies
-# Pass the property explicitly to the dotnet command during the build
+# 2. The Infrastructure (DbContext & Configurations)
+COPY ./TeachTrack.Infrastructure/*.csproj ./TeachTrack.Infrastructure/
+
+# 3. The Services (Application Logic) 
+COPY ./TeachTrack.Service/*.csproj ./TeachTrack.Service/
+
+# 4. The API (Entry Point)
+COPY ./TeachTrack.Api/*.csproj ./TeachTrack.Api/
+
+# --- RESTORE ---
+# Restore the API. Since API depends on Infra, and Infra depends on Core, 
+# this single command restores EVERYTHING.
 RUN dotnet restore ./TeachTrack.Api/TeachTrack.Api.csproj /p:HUSKY=${BUILD_ARGS_HUSKY}
 
-# Now copy the rest of the source code
+# --- COPY SOURCE & BUILD ---
 COPY . .
 
-# Publish the application
 ARG TARGETARCH
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet publish ./TeachTrack.Api/TeachTrack.Api.csproj -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS development
+# ==========================================
+# 2. Development Stage
+# ==========================================
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS development
 WORKDIR /src
 
-COPY ./TeachTrack.Api/*.csproj ./TeachTrack.Api/
-COPY ./TeachTrack.Model/*.csproj ./TeachTrack.Model/
-COPY ./TeachTrack.Service/*.csproj ./TeachTrack.Service/
+# Copy all project definitions again for the Dev environment
 COPY ./TeachTrack.Core/*.csproj ./TeachTrack.Core/
+COPY ./TeachTrack.Infrastructure/*.csproj ./TeachTrack.Infrastructure/
+COPY ./TeachTrack.Service/*.csproj ./TeachTrack.Service/
+COPY ./TeachTrack.Api/*.csproj ./TeachTrack.Api/
 
-# We also need to pass the property here to prevent failure during dotnet restore in development stage
+# Restore dependencies
 RUN dotnet restore ./TeachTrack.Api/TeachTrack.Api.csproj /p:HUSKY=0 
 
 COPY . .
-
 WORKDIR /src/TeachTrack.Api
 
 CMD ["dotnet", "watch", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:8080"]
 
-# 2. Final Stage: Creates the small, secure production image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+# ==========================================
+# 3. Final Stage
+# ==========================================
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
-
-# Copy the published output from the build stage
 COPY --from=build /app .
 
-# Create a non-root user and switch to it
 RUN adduser \
     --system \
     --disabled-password \
