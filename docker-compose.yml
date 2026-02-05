@@ -9,6 +9,14 @@ services:
       - "8080:8080"
     volumes:
       - .:/src
+      - /src/TeachTrack.Api/obj
+      - /src/TeachTrack.Api/bin
+      - /src/TeachTrack.Core/obj
+      - /src/TeachTrack.Core/bin
+      - /src/TeachTrack.Infrastructure/obj
+      - /src/TeachTrack.Infrastructure/bin
+      - /src/TeachTrack.Service/obj
+      - /src/TeachTrack.Service/bin
     depends_on:
       postgres:
         condition: service_healthy
@@ -22,7 +30,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
 
   postgres:
-    image: postgres:latest 
+    image: postgres:15-alpine
     container_name: TeachTrackContainer
     restart: always
     env_file:
@@ -30,7 +38,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       start_period: 30s
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
